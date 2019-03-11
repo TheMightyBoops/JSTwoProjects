@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1199bfe6-9313-41f2-a993-d6bc94afa405" name="bitlampsites" url="http://lnoltingbitlampsites.com/js2/">
+        <fileTransfer host="lnolting.bitlampsites.com" port="22" rootFolder="/public_html/js2/" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
