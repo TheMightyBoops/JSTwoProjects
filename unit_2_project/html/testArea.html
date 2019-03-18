@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- model test -->
+    <script src="./../src/models/CharacterClass.js"></script>
+    <script src="./../src/models/CraftingMaterialClass.js"></script>
+    <script src="./../src/models/WeaponClass.js"></script>
+    <script>
+        var testMaterial = new CraftingMaterial("Test", true, 10);
+        var testWeapon = new Weapon(200, 200, 1000);
+        var testWeapon2 = new Weapon(300, 300, 1000)
+        var testChar = new Character(100, 100, testWeapon);
+
+        testChar.calculateDerivedStats();
+
+        console.log(testChar);
+
+        testChar.equippedWeapon = testWeapon2;
+        testChar.calculateDerivedStats();
+
+        console.log(testChar)
+    </script>
+</head>
+<body>
+test
+</body>
+</html>
