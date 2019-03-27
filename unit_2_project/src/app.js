@@ -1,5 +1,7 @@
-new Vue({
+window.onload = function () {
+    new Vue({
 
-    el: '#app'
-
-});
+        el: '#app',
+        data: {}
+    });
+};
