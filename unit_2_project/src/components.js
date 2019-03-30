@@ -1,5 +1,13 @@
 Vue.component('v-inventory',{
-    template: '<p>Test</p>'
+    props:{
+        inventoryItems: {type:Array, required:true},
+    },
+
+    template: `
+        <ul> 
+            <li v-for="(item, i) in inventoryItems">{{item.name}}</li>
+        </ul>
+    `,
 });
 
 Vue.component('v-character-window', {

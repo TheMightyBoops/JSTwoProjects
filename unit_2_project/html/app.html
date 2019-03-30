@@ -1,12 +1,33 @@
 <html>
 <head>
     <!-- css -->
-    <link href="https://fonts.googleapis.com/css?
-    family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
     <link href="./../lib/vuetify.min.css" rel="stylesheet">
     <link href="./../src/overrides.css">
 
     <!---js--->
+    <script src="./../src/models/CharacterClass.js"></script>
+    <script src="./../src/models/CraftingMaterialClass.js"></script>
+    <script src="./../src/models/WeaponClass.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-firestore.js"></script>
+    <script>
+        //const firebase = require("firebase");
+        // Required for side-effects
+        //require("firebase/firestore");
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBdVlepcM0i1rf6A3vRE6FWwnM_bxukKKM",
+            authDomain: "unit2project-cfc26.firebaseapp.com",
+            databaseURL: "https://unit2project-cfc26.firebaseio.com",
+            projectId: "unit2project-cfc26",
+            storageBucket: "unit2project-cfc26.appspot.com",
+            messagingSenderId: "592749984607"
+        };
+        firebase.initializeApp(config);
+
+        var db = firebase.firestore();
+    </script>
     <script src="./../lib/vue.js"></script>
     <script src="./../lib/vuetify.js"></script>
     <script src="./../src/components.js"></script>
@@ -22,8 +43,7 @@
 <div id="app">
     <v-app>
         <v-content>
-            <v-inventory></v-inventory>
-            <v-character
+            <v-inventory :inventory-items="craftingMaterials"></v-inventory>
         </v-content>
     </v-app>
 </div>

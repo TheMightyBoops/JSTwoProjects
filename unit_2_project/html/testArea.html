@@ -4,23 +4,81 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- model test -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-firestore.js"></script>
+    <script>
+        //const firebase = require("firebase");
+        // Required for side-effects
+        //require("firebase/firestore");
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBdVlepcM0i1rf6A3vRE6FWwnM_bxukKKM",
+            authDomain: "unit2project-cfc26.firebaseapp.com",
+            databaseURL: "https://unit2project-cfc26.firebaseio.com",
+            projectId: "unit2project-cfc26",
+            storageBucket: "unit2project-cfc26.appspot.com",
+            messagingSenderId: "592749984607"
+        };
+        firebase.initializeApp(config);
+
+        var db = firebase.firestore();
+    </script>
     <script src="./../src/models/CharacterClass.js"></script>
     <script src="./../src/models/CraftingMaterialClass.js"></script>
     <script src="./../src/models/WeaponClass.js"></script>
     <script>
-        var testMaterial = new CraftingMaterial("Test", true, 10);
+        var testMaterial; //= new CraftingMaterial("Test", true, 10);
         var testWeapon = new Weapon(200, 200, 1000);
-        var testWeapon2 = new Weapon(300, 300, 1000)
+        var testWeapon = new Weapon(200, 200, 1000);
+        var testWeapon2 = new Weapon(300, 300, 1000);
         var testChar = new Character(100, 100, testWeapon);
 
         testChar.calculateDerivedStats();
 
-        console.log(testChar);
+        function createGameObjects(tableName) {
+            var materials = [];
+
+            db.collection(tableName).get().then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    //console.log(doc.id, "=>", doc.data());
+                    //docs.push(doc.data());
+                    //console.log(doc.data());
+                    //console.log(doc.data());
+                    let material = new CraftingMaterial(doc.data().name,
+                        doc.data().isOrganicMaterial,
+                        doc.data().experience);
+                    console.log(material);
+                    materials.push(material);
+                })
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+            /*const snapshot = await firebase.firestore().collection(tableName).get();
+            return snapshot.docs.map(doc => doc.data());*/
+
+            //console.log(docs);
+            console.log(materials);
+            return materials;
+        }
+
+        //console.log(testChar);
 
         testChar.equippedWeapon = testWeapon2;
         testChar.calculateDerivedStats();
 
-        console.log(testChar)
+
+
+
+        var materials = createGameObjects("CraftingMaterial");
+        Promise.all(materials).then(function(){console.log(materials.length)});
+        console.log(materials.length);
+        console.log(materials);
+
+
+        //testMaterial = new CraftingMaterial(material[0].name, docs[0].isOrganicMaterial, docs[0].experience);
+        //console.log(testMaterial);
+
     </script>
 </head>
 <body>
