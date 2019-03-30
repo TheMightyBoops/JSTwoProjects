@@ -1,0 +1,16 @@
+ul {
+    list-style: none;
+}
+
+v-slider {
+    display: inline-block;
+    width: 65%;
+}
+
+h1 {
+    margin: .1em;
+}
+
+p {
+    margin: 1em;
+}

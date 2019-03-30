@@ -6,11 +6,12 @@
  * 3/16/2019
  */
 class CraftingMaterial {
-    constructor(name, isOrganicMaterial, experience) {
+    constructor(name, isOrganicMaterial, experience, quantity) {
 
         this._name = name;
         this._isOrganicMaterial = isOrganicMaterial;
         this._experience = experience;
+        this._quantity = quantity;
 
         //organic materials have lower exp amts, but can increase a weapon multiplier
         if(isOrganicMaterial === true) {
@@ -37,5 +38,10 @@ class CraftingMaterial {
 
     get multiplier() {
         return this._multiplier;
+    }
+
+
+    get quantity() {
+        return this._quantity;
     }
 }

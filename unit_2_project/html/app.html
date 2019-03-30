@@ -3,7 +3,7 @@
     <!-- css -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
     <link href="./../lib/vuetify.min.css" rel="stylesheet">
-    <link href="./../src/overrides.css">
+    <link href="./../src/overrides.css" rel="stylesheet">
 
     <!---js--->
     <script src="./../src/models/CharacterClass.js"></script>
@@ -44,6 +44,7 @@
     <v-app>
         <v-content>
             <v-inventory :inventory-items="craftingMaterials"></v-inventory>
+            <v-character-window :characters="characters"></v-character-window>
         </v-content>
     </v-app>
 </div>

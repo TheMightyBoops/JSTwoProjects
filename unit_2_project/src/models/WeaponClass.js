@@ -7,17 +7,23 @@
  */
 
 class Weapon {
-    constructor(weaponPhysical, weaponMagic, experienceToLevelUp) {
+    constructor(name, weaponPhysical, weaponMagic, experienceToLevelUp) {
+        this._name = name;
         this._weaponPhysical = weaponPhysical;
         this._weponMagic = weaponMagic;
         this._multiplyer = 0;
         this._experienceToNextLevel = experienceToLevelUp * .1;
         this._weaponMagic = weaponMagic;
         this._experienceToLevelUp = experienceToLevelUp;
+        this._name = name;
 
 
     }
 
+
+    get name() {
+        return this._name;
+    }
 
     get weaponPhysical() {
         return this._weaponPhysical;

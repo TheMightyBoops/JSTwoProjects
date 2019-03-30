@@ -8,12 +8,17 @@
  * 3/16/2019
  */
 class Character {
-    constructor(basePhysical, baseMagic, equippedWeapon) {
+    constructor(name, basePhysical, baseMagic, equippedWeapon) {
+        this._name = name;
         this._basePhysical = basePhysical;
         this._baseMagic = baseMagic;
+        //not in db
         this._equippedWeapon = equippedWeapon;
+        //not in db
         this._derivedPhysical = 0;
+        //not in db
         this._derivedMagic = 0;
+        this.calculateDerivedStats();
 
     }
 
@@ -38,6 +43,11 @@ class Character {
 
     get derivedMagic() {
         return this._derivedMagic;
+    }
+
+
+    get name() {
+        return this._name;
     }
 
 //equipped weapons need to be changed on the fly,
