@@ -61,6 +61,7 @@ Vue.component('v-character-window', {
     ,
     template: `
     <div>
+        <!-- For Testing 
         <h1>{{currentCharacter.name}}</h1>
         <p>base stats</p>
         <p>phys</p>
@@ -72,8 +73,22 @@ Vue.component('v-character-window', {
         <p>{{currentCharacter.derivedPhysical}}</p>
         <p>mag</p>
         <p>{{currentCharacter.derivedMagic}}</p>
-    </div>    
-    `
+        -->
+        
+       <v-data-table
+    :headers="headers"
+    :items="desserts"
+    class="elevation-1"
+  >
+    <template v-slot:items="props">
+      <td>{{ currentCharacter.name }}</td>
+      <td class="text-xs-left">{{ currentCharacter.basePhysical}}</td>
+      <td class="text-xs-left">{{ currentCharacter.baseMagic}}</td>
+      <td class="text-xs-left">{{ currentCharacter.derivedPhysical}}</td>
+      <td class="text-xs-left">{{ currentCharacter.derivedMagic}}</td>
+    </template>
+  </v-data-table>
+    </div>`
     });
 
 Vue.component('v-weapon-window', {

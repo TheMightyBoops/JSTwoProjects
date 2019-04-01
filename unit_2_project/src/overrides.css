@@ -14,3 +14,6 @@ h1 {
 p {
     margin: 1em;
 }
+table, th, td {
+    border: 1px solid black;
+}
