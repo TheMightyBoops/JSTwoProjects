@@ -74,21 +74,13 @@ Vue.component('v-character-window', {
         <p>mag</p>
         <p>{{currentCharacter.derivedMagic}}</p>
         -->
-        
-       <v-data-table
-    :headers="headers"
-    :items="desserts"
-    class="elevation-1"
-  >
-    <template v-slot:items="props">
-      <td>{{ currentCharacter.name }}</td>
-      <td class="text-xs-left">{{ currentCharacter.basePhysical}}</td>
-      <td class="text-xs-left">{{ currentCharacter.baseMagic}}</td>
-      <td class="text-xs-left">{{ currentCharacter.derivedPhysical}}</td>
-      <td class="text-xs-left">{{ currentCharacter.derivedMagic}}</td>
-    </template>
-  </v-data-table>
-    </div>`
+        <v-data-iterator :items="">
+            <v-card>
+                <v-card-title><h4>{{currentCharacter.name}}</h4></v-card-title>
+            </v-card>   
+        </v-data-iterator>  
+       </div>   
+    `
     });
 
 Vue.component('v-weapon-window', {
