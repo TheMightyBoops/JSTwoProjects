@@ -44,4 +44,9 @@ class CraftingMaterial {
     get quantity() {
         return this._quantity;
     }
+
+
+    set quantity(value) {
+        this._quantity = value;
+    }
 }

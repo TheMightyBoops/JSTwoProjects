@@ -53,12 +53,15 @@ class Character {
 //equipped weapons need to be changed on the fly,
     set equippedWeapon(value) {
         this._equippedWeapon = value;
+        this.calculateDerivedStats();
     }
 
 
     set derivedPhysical(value) {
         this._derivedPhysical = value;
-    }set basePhysical(value) {
+    }
+
+    set basePhysical(value) {
         this._basePhysical = value;
     }
 
@@ -74,10 +77,10 @@ class Character {
     calculateDerivedStats() {
         if(this.equippedWeapon !== null) {
             try {
-                this.derivedPhysical = this.baseMagic
+                this.derivedPhysical = this.basePhysical
                     + this.equippedWeapon.weaponPhysical;
 
-                this.derivedMagic = this.basePhysical
+                this.derivedMagic = this.baseMagic
                     + this.equippedWeapon.weaponMagic;
 
             } catch (e) {

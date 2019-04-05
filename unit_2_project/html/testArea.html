@@ -38,6 +38,7 @@
         function createGameObjects(tableName) {
             var materials = [];
 
+
             db.collection(tableName).get().then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
                     //console.log(doc.id, "=>", doc.data());

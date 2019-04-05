@@ -43,8 +43,11 @@
 <div id="app">
     <v-app>
         <v-content>
-            <v-inventory :inventory-items="craftingMaterials"></v-inventory>
-            <v-character-window :characters="characters"></v-character-window>
+            <v-btn color="success" v-on:click="onButtonClick()">Change Character</v-btn>
+            <v-btn color="success" v-on:click="onButtonClickWeapon()">Change Weapon</v-btn>
+            <v-inventory :inventory-items="craftingMaterials" :current-weapon="currentWeapon"
+                         :current-character="currentCharacter"></v-inventory>
+            <v-stats-screen :current-character="currentCharacter" :current-weapon="currentWeapon"></v-stats-screen>
         </v-content>
     </v-app>
 </div>
