@@ -6,6 +6,7 @@
     <link href="./../src/overrides.css" rel="stylesheet">
 
     <!---js--->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="./../src/models/CharacterClass.js"></script>
     <script src="./../src/models/CraftingMaterialClass.js"></script>
     <script src="./../src/models/WeaponClass.js"></script>
@@ -37,16 +38,26 @@
     <title>Final Fantasy XIII Loot Utility</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,
     maximum-scale=1, user-scalable=no, minimal-ui">
-
+    <link rel=icon href=./../assets/favicon.ico sizes="16x16" type="image/png">
 </head>
 <body>
 <div id="app">
     <v-app>
         <v-content>
-            <v-btn color="success" v-on:click="onButtonClick()">Change Character</v-btn>
-            <v-btn color="success" v-on:click="onButtonClickWeapon()">Change Weapon</v-btn>
-            <v-inventory :inventory-items="craftingMaterials" :current-weapon="currentWeapon"
-                         :current-character="currentCharacter"></v-inventory>
+            <v-container>
+                <v-layout row wrap>
+                    <v-card dark color="black">
+                        <div id="changeButtons">
+                        <v-btn color="success" v-on:click="onButtonClick()">Change Character</v-btn>
+                        <v-btn color="success" v-on:click="onButtonClickWeapon()">Change Weapon</v-btn>
+                        </div>
+                        <v-inventory :inventory-items="craftingMaterials" :current-weapon="currentWeapon"
+                                :current-character="currentCharacter" style="max-height: 300px; overflow-y: scroll">
+
+                        </v-inventory>
+                    </v-card>
+                </v-layout>
+            </v-container>
             <v-stats-screen :current-character="currentCharacter" :current-weapon="currentWeapon"></v-stats-screen>
         </v-content>
     </v-app>

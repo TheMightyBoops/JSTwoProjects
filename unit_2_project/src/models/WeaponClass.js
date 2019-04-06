@@ -20,8 +20,17 @@ class Weapon {
         this._totalExperience = 0;
         this._addedPhysicalOnLevel = addedPhysicalOnLevel;
         this._addedMagicOnLevel = addedMagicOnLevel;
+        this._tempExperience = 0;
     }
 
+
+    get tempExperience() {
+        return this._tempExperience;
+    }
+
+    set tempExperience(value) {
+        this._tempExperience = value;
+    }
 
     get name() {
         return this._name;
@@ -82,11 +91,18 @@ class Weapon {
 
     set totalExperience(value) {
         this._totalExperience += value;
-        let truncateLevel = this.totalExperience / this.experienceToLevelUp;
+        let truncateLevel = (this.tempExperience + value) / this.experienceToLevelUp;
         truncateLevel = Math.trunc(truncateLevel);
+        console.log(truncateLevel);
         this.level += truncateLevel;
         this.weaponMagic += (truncateLevel * this._addedMagicOnLevel);
         this.weaponPhysical += (truncateLevel * this._addedPhysicalOnLevel);
+
+        if(value >= this.experienceToLevelUp) {
+            this.tempExperience = (value) - (truncateLevel * this.experienceToLevelUp);
+        } else {
+            this.tempExperience =+ value;
+        }
     }
 
     get level() {

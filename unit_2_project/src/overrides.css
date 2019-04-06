@@ -17,3 +17,8 @@ p {
 table, th, td {
     border: 1px solid black;
 }
+
+body, #app{
+    background-color: #0a1a25;
+}
+

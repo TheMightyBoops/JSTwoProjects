@@ -74,6 +74,27 @@ window.onload = function () {
                 this.currentCharacter = this.characters[this.index];
                 //update character
                 this.currentCharacter.equippedWeapon = this.currentWeapon;
+
+                //helper method
+                function applyBorder(id) {
+                    document.getElementById(id).style.border = '2px solid #f4b642';
+                    document.getElementById(id).style.borderRadius = '2px / 2px';
+                    document.getElementById(id).style.border
+                }
+
+                function eraseBorder(id) {
+                    document.getElementById(id).style.border = 'none';
+                }
+                eraseBorder('charStrength');
+                eraseBorder('charMagic');
+                eraseBorder('weaponXp');
+                eraseBorder('weaponLevel');
+                eraseBorder('weaponStrength');
+                eraseBorder('weaponMagic');
+
+                applyBorder('characterName');
+                eraseBorder('weaponName')
+
             },
 
             onButtonClickWeapon() {
@@ -87,11 +108,30 @@ window.onload = function () {
                 this.currentWeapon = this.weapons[this.index];
                 //update character
                 this.currentCharacter.equippedWeapon = this.currentWeapon;
+                //helper method
+                function applyBorder(id, color) {
+                    document.getElementById(id).style.border = '2px solid ' + color;
+                    document.getElementById(id).style.borderRadius = '2px / 2px';
+                    document.getElementById(id).style.border
+                }
+
+                function eraseBorder(id) {
+                    document.getElementById(id).style.border = 'none';
+                }
+                eraseBorder('charStrength');
+                eraseBorder('charMagic');
+                eraseBorder('weaponXp');
+                eraseBorder('weaponLevel');
+                eraseBorder('weaponStrength');
+                eraseBorder('weaponMagic');
+                applyBorder('weaponName', '#f4b642');
+                eraseBorder('characterName');
+
             }
         },
         watch: {
             craftingMaterials() {
-                //console.log(this.craftingMaterials);
+
             },
 
             weapons() {

@@ -27,59 +27,14 @@
     <script src="./../src/models/CraftingMaterialClass.js"></script>
     <script src="./../src/models/WeaponClass.js"></script>
     <script>
-        var testMaterial; //= new CraftingMaterial("Test", true, 10);
-        var testWeapon = new Weapon(200, 200, 1000);
-        var testWeapon = new Weapon(200, 200, 1000);
-        var testWeapon2 = new Weapon(300, 300, 1000);
-        var testChar = new Character(100, 100, testWeapon);
-
-        testChar.calculateDerivedStats();
-
-        function createGameObjects(tableName) {
-            var materials = [];
-
-
-            db.collection(tableName).get().then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    //console.log(doc.id, "=>", doc.data());
-                    //docs.push(doc.data());
-                    //console.log(doc.data());
-                    //console.log(doc.data());
-                    let material = new CraftingMaterial(doc.data().name,
-                        doc.data().isOrganicMaterial,
-                        doc.data().experience);
-                    console.log(material);
-                    materials.push(material);
-                })
-            }).catch(function (error) {
-                console.log(error);
-            });
-
-            /*const snapshot = await firebase.firestore().collection(tableName).get();
-            return snapshot.docs.map(doc => doc.data());*/
-
-            //console.log(docs);
-            console.log(materials);
-            return materials;
-        }
-
-        //console.log(testChar);
-
-        testChar.equippedWeapon = testWeapon2;
-        testChar.calculateDerivedStats();
-
-
-
-
-        var materials = createGameObjects("CraftingMaterial");
-        Promise.all(materials).then(function(){console.log(materials.length)});
-        console.log(materials.length);
-        console.log(materials);
-
-
-        //testMaterial = new CraftingMaterial(material[0].name, docs[0].isOrganicMaterial, docs[0].experience);
-        //console.log(testMaterial);
-
+        // Add a new document in collection "cities"
+        /*
+        db.collection("CraftingMaterial").add({
+           name: "Goo",
+           isOrganicMaterial: true,
+            quantity: 50,
+            experience: 1
+        });*/
     </script>
 </head>
 <body>
