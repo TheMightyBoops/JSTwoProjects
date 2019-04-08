@@ -40,9 +40,17 @@ Vue.component('v-inventory', {
                     this.inventoryItems[i].quantity = newQuantity;
                     //console.log(this.inventoryItems[i].quantity);
 
+
+                    let tempMult = this.currentWeapon.multiplier;
                     //this method gets the multiplyer
                     this.currentWeapon.generateMultiplier(this.inventoryItems[i].multiplier, quantity);
 
+
+                    if(tempMult < this.currentWeapon.multiplier) {
+                        applyBorder('weaponMultiplier');
+                    } else {
+                        eraseBorder('weaponMultiplier');
+                    }
                     // this is for style changes
                     let level = this.currentWeapon.level;
                     //set xp being added automatically levels up
@@ -226,7 +234,7 @@ Vue.component('v-weapon-window', {
                                 <div id="weaponName"><v-card dark color="black">{{currentWeapon.name}}</v-card></div>
                             </v-flex>
                             <v-flex xs4>
-                                <v-card dark color="primary">Exp. Multiplier: x{{currentWeapon.multiplier}}</v-card>
+                                <div id="weaponMultiplier"><v-card dark color="primary">Exp. Multiplier: x{{currentWeapon.multiplier}}</v-card></div>
                             </v-flex>
                             <v-flex xs4>
                                <div id="weaponXp"><v-card text-lg-center dark color="primary">Total Exp: {{currentWeapon.totalExperience}}</v-card></div>

@@ -70,11 +70,24 @@ class Weapon {
     }
 
     generateMultiplier(value, quantity) {
+        //helper method
+        function applyBorder(id) {
+            document.getElementById(id).style.border = '2px solid #3fff35';
+            document.getElementById(id).style.borderRadius = '2px / 2px';
+            document.getElementById(id).style.border
+        }
+
+        function eraseBorder(id) {
+            document.getElementById(id).style.border = 'none';
+        }
+
+
         this._multiplier = (value * quantity) + this.multiplier;
-        if(this.multiplier > 2.0) {
+        if (this.multiplier > 2.0) {
             this.multiplier = 2
         }
     }
+
 
     //get experienceToNextLevel() {
     //   return this._experienceToNextLevel;
