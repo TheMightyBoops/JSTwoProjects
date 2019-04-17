@@ -22,3 +22,26 @@ body, #app{
     background-color: #0a1a25;
 }
 
+#buddy {
+    /*
+        When image scale changes width and height
+        will change
+     */
+    width: 20em;
+    height: 20em;
+    margin-left: 30%;
+    /*left: 50%;*/
+}
+
+.appContainer, #changeButtons {
+    margin-top: 0;
+    padding-top: 0;
+    height: auto;
+    width: 100%;
+}
+
+/*.topNav {
+    height: auto;
+    width: 25%;
+}*/
+

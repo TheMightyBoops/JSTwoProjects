@@ -8,7 +8,11 @@ window.onload = function () {
             weapons: [],
             currentWeapon: {type: Object},
             currentCharacter: {type: Object},
+            currentBook: {type: Object},
             index: 0,
+            showInventory: false,
+            showNameField: false,
+            settingsPaneIsOpen: false,
 
             firestore: {
                 craftingMaterialsDB: db.collection('CraftingMaterial'),
@@ -127,6 +131,32 @@ window.onload = function () {
                 applyBorder('weaponName', '#f4b642');
                 eraseBorder('characterName');
 
+            },
+
+            onButtonClickFeed() {
+                let sI = this.showInventory;
+                if(sI) {
+                    this.showInventory = false;
+                } else {
+                    this.showInventory = true;
+                }
+
+            },
+
+            onButtonClickName() {
+                if(this.showNameField) {
+                    this.showNameField = false;
+                } else {
+                    this.showNameField = true;
+                }
+            },
+
+            onButtonClickBook() {
+                if(this.settingsPaneIsOpen) {
+                    this.settingsPaneIsOpen = false;
+                } else {
+                    this.settingsPaneIsOpen = true;
+                }
             }
         },
         watch: {

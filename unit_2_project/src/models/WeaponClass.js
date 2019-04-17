@@ -7,6 +7,9 @@
  */
 
 class Weapon {
+    set name(value) {
+        this._name = value;
+    }
     constructor(name, weaponPhysical, weaponMagic, experienceToLevelUp, addedPhysicalOnLevel, addedMagicOnLevel) {
         this._name = name;
         this._weaponPhysical = weaponPhysical;
@@ -86,6 +89,8 @@ class Weapon {
         if (this.multiplier > 2.0) {
             this.multiplier = 2
         }
+
+
     }
 
 

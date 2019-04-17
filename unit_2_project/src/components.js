@@ -260,7 +260,17 @@ Vue.component('v-stats-screen', {
     },
 
     template: `<div>
-            <v-character-window :current-character="currentCharacter" :current-weapon="currentWeapon"></v-character-window>
+            <!--<v-character-window :current-character="currentCharacter" :current-weapon="currentWeapon"></v-character-window>-->
             <v-weapon-window :current-weapon="currentWeapon"></v-weapon-window>
     </div>`
+});
+
+Vue.component('v-book-settings-pane', {
+   props: {
+       bookMetadata: {type: Object}
+   },
+
+   template:
+       `<div>Test</div>`
+
 });
