@@ -8,7 +8,7 @@ window.onload = function () {
             weapons: [],
             currentWeapon: {type: Object},
             currentCharacter: {type: Object},
-            currentBook: {type: Object},
+            currentBook: new Book(),
             index: 0,
             showInventory: false,
             showNameField: false,
@@ -64,6 +64,9 @@ window.onload = function () {
                 });
             });
 
+            //Declare Default Book for testing
+            this.currentBook.title = "placeholder";
+            this.currentBook.pageCount = 100;
 
         },
         methods: {

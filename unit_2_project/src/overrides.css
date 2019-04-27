@@ -33,11 +33,31 @@ body, #app{
     /*left: 50%;*/
 }
 
+#bookCover {
+    width: 5em;
+    height: 5em;
+    margin-left: 15%;
+}
+
 .appContainer, #changeButtons {
     margin-top: 0;
     padding-top: 0;
     height: auto;
     width: 100%;
+}
+
+#bookPane {
+    margin-left: 15%;
+    margin-right: 15%;
+    background-color: #0f6674;
+}
+
+.innerInput {
+    margin-left: 2%;
+    margin-top: 2%;
+    background-color: #34ce57;
+    border: 1px solid black;
+    border-radius: 3px;
 }
 
 /*.topNav {

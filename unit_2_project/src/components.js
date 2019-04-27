@@ -31,6 +31,7 @@ Vue.component('v-inventory', {
             function eraseBorder(id) {
                 document.getElementById(id).style.border = 'none';
             }
+
             eraseBorder('characterName');
             eraseBorder('weaponName');
             let newQuantity = null;
@@ -46,7 +47,7 @@ Vue.component('v-inventory', {
                     this.currentWeapon.generateMultiplier(this.inventoryItems[i].multiplier, quantity);
 
 
-                    if(tempMult < this.currentWeapon.multiplier) {
+                    if (tempMult < this.currentWeapon.multiplier) {
                         applyBorder('weaponMultiplier');
                     } else {
                         eraseBorder('weaponMultiplier');
@@ -122,8 +123,8 @@ Vue.component('v-inventory', {
     `,
     watch: {
         inventoryItems: function () {
-            for(let i=0; i < this.inventoryItems.length; ++i) {
-                if(this.inventoryItems[i].quantity === 0) {
+            for (let i = 0; i < this.inventoryItems.length; ++i) {
+                if (this.inventoryItems[i].quantity === 0) {
                     this.inventoryItems[i].splice();
                 }
             }
@@ -266,11 +267,55 @@ Vue.component('v-stats-screen', {
 });
 
 Vue.component('v-book-settings-pane', {
-   props: {
-       bookMetadata: {type: Object}
-   },
+    props: {
+        bookMetaData: {type: Object},
+    },
 
-   template:
-       `<div>Test</div>`
+    data() {
+        return {
+            titleRequest: new XMLHttpRequest(),
+            tempTitle: ""
+        }
+    },
+
+    methods: {
+        findUserBook(titleQuery) {
+            let GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=";
+            var queryURL = GOOGLE_BOOKS_URL + titleQuery;
+            this.titleRequest.open("GET", queryURL);
+            //request.onload = function () {
+            //var data = JSON.parse(this.response);
+            //    console.log(request);
+            //};
+            this.titleRequest.send();
+
+        }
+    },
+
+    mounted: function () {
+        this.titleRequest.onreadystatechange = function () {
+            if(this.readyState == 4 && this.status == 200) {
+                var books = JSON.parse(this.responseText);
+                console.log(books.items[0].volumeInfo.title);
+                this.tempTitle = books.items[0].volumeInfo.title;
+            }
+
+        }
+    },
+
+    watch: {
+        tempTitle: function (val) {
+            this.bookMetaData.title = this.tempTitle;
+            console.log(this.bookMetaData);
+        }
+    },
+    template:
+        `<div id="bookPane">
+              <input class="innerInput" type="text" v-model="bookMetaData.title">
+              <input class="innerInput" type="text" v-model="bookMetaData.pageCount">
+              <br />
+              <img id="bookCover" src="./../assets/Book-Placeholder.png">
+              <v-btn color="success" v-on:click="findUserBook(bookMetaData.title)">Search</v-btn> 
+        </div>`
 
 });
