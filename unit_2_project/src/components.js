@@ -269,36 +269,124 @@ Vue.component('v-stats-screen', {
 Vue.component('v-book-settings-pane', {
     props: {
         bookMetaData: {type: Object},
+        coverImage: {type: String}
     },
 
     data() {
         return {
             titleRequest: new XMLHttpRequest(),
-            tempTitle: ""
+            tempRequestData: {type: Object},
+            buttonText: "Search",
+            titleCharacters: 20,
+            pageCountCharacters: 2,
+            currentJSONIndex: 0,
+            previousTitle: "",
+            nextTitle: "",
+            results: 0,
+            titleIsLocked: true,
+            //coverImageURL: "./../assets/Book-Placeholder.png"
         }
     },
 
     methods: {
         findUserBook(titleQuery) {
+            this.currentJSONIndex = 0;
+            this.previousTitle = "";
+            this.nextTitle = "";
             let GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=";
             var queryURL = GOOGLE_BOOKS_URL + titleQuery;
-            this.titleRequest.open("GET", queryURL);
+            //this.titleRequest.open("GET", queryURL);
             //request.onload = function () {
             //var data = JSON.parse(this.response);
             //    console.log(request);
             //};
-            this.titleRequest.send();
+            //this.titleRequest.send();
+            axios.get(queryURL).then(response => this.tempRequestData = response);
+            //console.log(this.tempRequestData.items[0].volumeInfo.title);
 
+
+        },
+
+        moveUp() {
+
+
+            if (this.tempRequestData != null && this.currentJSONIndex !== 0) {
+                this.currentJSONIndex--;
+                if(this.currentJSONIndex !== 0) {
+                    this.previousTitle = this.tempRequestData.data.items[this.currentJSONIndex-1].volumeInfo.title;
+                } else {
+                    this.previousTitle = '';
+                }
+
+                this.nextTitle = this.tempRequestData.data.items[this.currentJSONIndex+1].volumeInfo.title;
+                let tempTitle = this.tempRequestData.data.items[this.currentJSONIndex].volumeInfo.title;
+                let tempPages = this.tempRequestData.data.items[this.currentJSONIndex].volumeInfo.pageCount;
+                //console.log(this.tempRequestData.data.items);
+                this.bookMetaData.title = tempTitle;
+                this.bookMetaData.pageCount = tempPages;
+                this.buttonText = "Search Again";
+
+                if (tempTitle.length < 79) {
+                    this.titleCharacters = tempTitle.length - 5;
+                }
+
+
+            }
+        },
+
+        moveDown() {
+            //console.log(this.this.tempRequestData.data.items);
+            if (this.tempRequestData !== undefined
+                && this.currentJSONIndex < (this.tempRequestData.data.items.length-1)) {
+
+                this.currentJSONIndex++;
+                this.previousTitle = this.tempRequestData.data.items[this.currentJSONIndex-1].volumeInfo.title;
+                if(this.tempRequestData.data.items.length !== (this.currentJSONIndex +1)) {
+                    this.nextTitle = this.tempRequestData.data.items[this.currentJSONIndex + 1].volumeInfo.title;
+                } else {
+                    this.nextTitle = '';
+                }
+                let tempTitle = this.tempRequestData.data.items[this.currentJSONIndex].volumeInfo.title;
+                let tempPages = this.tempRequestData.data.items[this.currentJSONIndex].volumeInfo.pageCount;
+                //console.log(this.tempRequestData.data.items);
+                this.bookMetaData.title = tempTitle;
+                this.bookMetaData.pageCount = tempPages;
+                this.buttonText = "Search Again";
+
+                if (tempTitle.length < 79) {
+                    this.titleCharacters = tempTitle.length - 5;
+                }
+            }
+        },
+
+        lockTitle() {
+
+            this.previousTitle = "";
+            this.nextTitle = "";
+            this.titleIsLocked = true;
+            try {
+                this.$parent.$parent.$parent.coverImageURL = this.tempRequestData.data.items[this.currentJSONIndex].volumeInfo.imageLinks.thumbnail.toString();
+                //this.coverImage = this.coverImageURL;
+                console.log(this.coverImageURL.toString());
+            } catch {
+                console.log("no cover");
+            }
+        },
+
+        unLockTitle() {
+          this.titleIsLocked = false;
         }
     },
 
     mounted: function () {
         this.titleRequest.onreadystatechange = function () {
-            if(this.readyState == 4 && this.status == 200) {
+            if (this.readyState == 4 && this.status == 200) {
                 var books = JSON.parse(this.responseText);
                 console.log(books.items[0].volumeInfo.title);
                 this.tempTitle = books.items[0].volumeInfo.title;
+
             }
+
 
         }
     },
@@ -307,15 +395,65 @@ Vue.component('v-book-settings-pane', {
         tempTitle: function (val) {
             this.bookMetaData.title = this.tempTitle;
             console.log(this.bookMetaData);
+
+
+        },
+
+        tempRequestData: function (val) {
+            try {
+                let tempTitle = this.tempRequestData.data.items[0].volumeInfo.title;
+                let tempPages = this.tempRequestData.data.items[0].volumeInfo.pageCount;
+                console.log(this.tempRequestData.data.items);
+                this.bookMetaData.title = tempTitle;
+                this.bookMetaData.pageCount = tempPages;
+                this.buttonText = "Search Again";
+
+                if (tempTitle.length < 79) {
+                    this.titleCharacters = tempTitle.length - 5;
+                }
+                this.nextTitle = this.tempRequestData.data.items[this.currentJSONIndex+1].volumeInfo.title;
+                this.results = this.tempRequestData.data.items.length;
+                //this.pageCountCharacters = tempPages.toString().trim().length - 20;
+            } catch (E) {
+                //do nothing
+                console.log("broken");
+            }
+        },
+
+        coverImageURL: function (val) {
+            //document.getElementById("bookCover").src = this.coverImageURL;
         }
     },
     template:
         `<div id="bookPane">
-              <input class="innerInput" type="text" v-model="bookMetaData.title">
-              <input class="innerInput" type="text" v-model="bookMetaData.pageCount">
-              <br />
-              <img id="bookCover" src="./../assets/Book-Placeholder.png">
-              <v-btn color="success" v-on:click="findUserBook(bookMetaData.title)">Search</v-btn> 
+              <span v-if="!titleIsLocked">
+                <h4>Edit your current book</h4>
+                <div id="titleArea">
+                    <p v-if="previousTitle != ''">{{previousTitle}}</p>
+                    <input id="titleInput" class="innerInput" type="text" v-model="bookMetaData.title" :size="titleCharacters"><br />
+                    <p v-if="nextTitle != ''">{{nextTitle}}</p>
+                    <v-btn v-if="buttonText != 'Search'" small color="primary" v-on:click="moveUp"><i class="material-icons">arrow_upward</i></v-btn>
+                    <v-btn v-if="buttonText != 'Search'" small color="primary" v-on:click="moveDown"><i class="material-icons">arrow_downward</i></v-btn>
+                    <span id="results" v-if="buttonText != 'Search'">Results: {{results}}</span>
+                </div>
+                <input class="innerInput" type="text" v-model="bookMetaData.pageCount" :size="pageCountCharacters">
+                <br />
+                <v-btn color="success" v-on:click="findUserBook(bookMetaData.title)">{{buttonText}}</v-btn> 
+                <v-btn color="default" v-on:click="lockTitle()">Lock-in your new book</v-btn>
+                <br>
+                <p class="disclaimer">* Anything with a black border can be edited manually, alternatively the title area 
+                doubles as a search bar, enter "Buddy" and click search to try it out!</p>
+              </span>
+              <span v-if="titleIsLocked">
+                <img :src="coverImage" id="bookCover">
+                <br>
+                <p>{{bookMetaData.title}}</p>
+                <p>{{bookMetaData.pageCount}} pgs.</p>
+                <v-btn color="warning" v-on:click="unLockTitle()">Change Book</v-btn>
+                <p class="disclaimer">* If you click "CHANGE BOOK" you will lose ALL pages you've read in your
+                current book, so strive to finish it!
+                </p>
+              </span>
         </div>`
 
 });

@@ -13,6 +13,7 @@ window.onload = function () {
             showInventory: false,
             showNameField: false,
             settingsPaneIsOpen: false,
+            coverImageURL: "./../assets/Book-Placeholder.png",
 
             firestore: {
                 craftingMaterialsDB: db.collection('CraftingMaterial'),
@@ -65,7 +66,7 @@ window.onload = function () {
             });
 
             //Declare Default Book for testing
-            this.currentBook.title = "placeholder";
+            this.currentBook.title = "Buddy";
             this.currentBook.pageCount = 100;
 
         },

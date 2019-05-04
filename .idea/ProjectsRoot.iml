@@ -10,5 +10,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bootstrap-vue" level="application" />
     <orderEntry type="library" name="vue-resource" level="application" />
+    <orderEntry type="library" name="axios" level="application" />
+    <orderEntry type="library" name="firebase-app" level="application" />
+    <orderEntry type="library" name="firebase-firestore" level="application" />
   </component>
 </module>

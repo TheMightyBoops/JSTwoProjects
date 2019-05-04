@@ -7,6 +7,7 @@
 
     <!---js--->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
     <script src="./../src/models/CharacterClass.js"></script>
     <script src="./../src/models/CraftingMaterialClass.js"></script>
     <script src="./../src/models/WeaponClass.js"></script>
@@ -64,7 +65,7 @@
             </v-container>
             <img id="buddy" src="./../assets/placeHolderBuddy.svg">
             <v-stats-screen :current-character="currentCharacter" :current-weapon="currentWeapon"></v-stats-screen>
-            <v-book-settings-pane v-if="settingsPaneIsOpen" :book-meta-data="currentBook"></v-book-settings-pane>
+            <v-book-settings-pane v-if="settingsPaneIsOpen" :book-meta-data="currentBook" :cover-image="coverImageURL"></v-book-settings-pane>
         </v-content>
     </v-app>
 </div>
