@@ -13,17 +13,29 @@ window.onload = function () {
             showInventory: false,
             showNameField: false,
             settingsPaneIsOpen: false,
+            showPageLog: false,
+            showTutorPane: true,
             coverImageURL: "./../assets/Book-Placeholder.png",
+            buddyImageRef: "./../assets/egg.png",
+            pageItems: {
+                totalPages: 0,
+                totalPagesAllBooks: 0,
+                totalPagesThisEntry: 0,
+                entryLog: [],
+                entryLogDates: [],
+                remainingPages: 0
+            },
 
             firestore: {
                 craftingMaterialsDB: db.collection('CraftingMaterial'),
                 charactersDB: db.collection('Character'),
                 weaponsDB: db.collection('Weapon')
-            }
+            },
+            tutorText: ""
         },
         created: function () {
 
-
+            /*
             //Get all data
             let bugFix = this;
             db.collection("CraftingMaterial").get().then(function (querySnapshot) {
@@ -63,11 +75,24 @@ window.onload = function () {
                     //console.log(tempCharacter);.
                     bugFix.characters.push(tempCharacter);
                 });
-            });
+            });*/
 
-            //Declare Default Book for testing
-            this.currentBook.title = "Buddy";
-            this.currentBook.pageCount = 100;
+            if (localStorage.getItem("title") != null) {
+                //local storage exists
+                this.currentBook.title = localStorage.getItem("title");
+                this.currentBook.pageCount = localStorage.getItem("pageCount");
+                this.coverImageURL = localStorage.getItem("coverImageURL");
+                this.craftingMaterials = localStorage.getItem("craftingMaterials");
+                this.pageItems = localStorage.getItem("pageItems");
+                this.buddyImageRef = localStorage.getItem("buddyImageRef");
+            } else {
+                //console.log("happened");
+                //Declare Default Book for testing
+                this.currentBook.title = "Buddy";
+                this.currentBook.pageCount = 100;
+                this.currentWeapon = new Weapon("Egg", 0, 0, 1000, 0, 0);
+                this.craftingMaterials = [new CraftingMaterial("Hatch Light", false, 1000, 1)];
+            }
 
         },
         methods: {
@@ -75,7 +100,7 @@ window.onload = function () {
 
                 this.index++;
 
-                if(this.index >= this.characters.length) {
+                if (this.index >= this.characters.length) {
                     this.index = 0;
                 }
 
@@ -85,14 +110,15 @@ window.onload = function () {
 
                 //helper method
                 function applyBorder(id) {
-                    document.getElementById(id).style.border = '2px solid #f4b642';
-                    document.getElementById(id).style.borderRadius = '2px / 2px';
-                    document.getElementById(id).style.border
+                    //document.getElementById(id).style.border = '2px solid #f4b642';
+                    //document.getElementById(id).style.borderRadius = '2px / 2px';
+                    //document.getElementById(id).style.border
                 }
 
                 function eraseBorder(id) {
-                    document.getElementById(id).style.border = 'none';
+                    //document.getElementById(id).style.border = 'none';
                 }
+
                 eraseBorder('charStrength');
                 eraseBorder('charMagic');
                 eraseBorder('weaponXp');
@@ -109,13 +135,14 @@ window.onload = function () {
 
                 this.index++;
 
-                if(this.index >= this.weapons.length) {
+                if (this.index >= this.weapons.length) {
                     this.index = 0;
                 }
 
                 this.currentWeapon = this.weapons[this.index];
                 //update character
                 this.currentCharacter.equippedWeapon = this.currentWeapon;
+
                 //helper method
                 function applyBorder(id, color) {
                     document.getElementById(id).style.border = '2px solid ' + color;
@@ -126,6 +153,7 @@ window.onload = function () {
                 function eraseBorder(id) {
                     document.getElementById(id).style.border = 'none';
                 }
+
                 eraseBorder('charStrength');
                 eraseBorder('charMagic');
                 eraseBorder('weaponXp');
@@ -139,7 +167,7 @@ window.onload = function () {
 
             onButtonClickFeed() {
                 let sI = this.showInventory;
-                if(sI) {
+                if (sI) {
                     this.showInventory = false;
                 } else {
                     this.showInventory = true;
@@ -148,7 +176,7 @@ window.onload = function () {
             },
 
             onButtonClickName() {
-                if(this.showNameField) {
+                if (this.showNameField) {
                     this.showNameField = false;
                 } else {
                     this.showNameField = true;
@@ -156,11 +184,27 @@ window.onload = function () {
             },
 
             onButtonClickBook() {
-                if(this.settingsPaneIsOpen) {
+                if (this.settingsPaneIsOpen) {
                     this.settingsPaneIsOpen = false;
                 } else {
                     this.settingsPaneIsOpen = true;
                 }
+            },
+
+            onButtonClickLogPages() {
+                if (this.showPageLog) {
+                    this.showPageLog = false;
+                } else {
+                    this.showPageLog = true;
+                }
+            },
+
+            onButtonClickTutor() {
+              if (this.showTutorPane) {
+                  this.showTutorPane = false;
+              } else {
+                  this.showTutorPane = true;
+              }
             }
         },
         watch: {
@@ -180,6 +224,24 @@ window.onload = function () {
 
             currentCharacter: function () {
 
+            },
+
+            'currentWeapon.level': function () {
+                console.log("ran");
+                if(this.currentWeapon.level !== 1) {
+                    switch (this.currentWeapon.level) {
+                        case 2:
+                            this.buddyImageRef = "./../assets/buddy1.png";
+                            this.tutorText = "You've hatched a buddy! read and " +
+                                "input more pages to get more food to feed your buddy. Also, click " +
+                                "'Rename Your Buddy' to give him a name that's not egg.";
+                            break;
+
+                        case 3:
+                            this.buddyImageRef = "./../assets/buddy2.png"
+                            break;
+                    }
+                }
             }
         }
     });

@@ -23,14 +23,15 @@ Vue.component('v-inventory', {
             //First Quan must change
             //helper method
             function applyBorder(id) {
-                document.getElementById(id).style.border = '2px solid #3fff35';
-                document.getElementById(id).style.borderRadius = '2px / 2px';
-                document.getElementById(id).style.border
+                //document.getElementById(id).style.border = '2px solid #3fff35';
+                //document.getElementById(id).style.borderRadius = '2px / 2px';
+                //document.getElementById(id).style.border
             }
 
             function eraseBorder(id) {
-                document.getElementById(id).style.border = 'none';
+                //document.getElementById(id).style.border = 'none';
             }
+
 
             eraseBorder('characterName');
             eraseBorder('weaponName');
@@ -61,12 +62,7 @@ Vue.component('v-inventory', {
 
                     //if level went up these must be updated to green otherwise they must be flipped back
                     if (level < this.currentWeapon.level) {
-                        applyBorder('charStrength');
-                        applyBorder('charMagic');
-                        applyBorder('weaponXp');
-                        applyBorder('weaponLevel');
-                        applyBorder('weaponStrength');
-                        applyBorder('weaponMagic');
+
                     } else {
                         eraseBorder('charStrength');
                         eraseBorder('charMagic');
@@ -130,7 +126,7 @@ Vue.component('v-inventory', {
             }
 
             console.log("change");
-        }
+        },
 
     }
 });
@@ -367,6 +363,7 @@ Vue.component('v-book-settings-pane', {
             try {
                 this.$parent.$parent.$parent.coverImageURL = this.tempRequestData.data.items[this.currentJSONIndex].volumeInfo.imageLinks.thumbnail.toString();
                 //this.coverImage = this.coverImageURL;
+                this.$parent.$parent.$parent.pageItems.totalPages = 0;
                 console.log(this.coverImageURL.toString());
             } catch {
                 console.log("no cover");
@@ -425,7 +422,7 @@ Vue.component('v-book-settings-pane', {
         }
     },
     template:
-        `<div id="bookPane">
+        `<div class="bookPane">
               <span v-if="!titleIsLocked">
                 <h4>Edit your current book</h4>
                 <div id="titleArea">
@@ -456,4 +453,121 @@ Vue.component('v-book-settings-pane', {
               </span>
         </div>`
 
+});
+
+Vue.component('v-page-log', {
+    props: {
+        pageItems: {type:Object},
+        bookMetaData: {type: Object}
+    },
+
+    data() {
+        return {
+            userPageEntry: "",
+            timeRecord: undefined,
+            formattedDate: undefined,
+            userWarning: "You entered your pages wrong, try again",
+            pageNumberWasValid: true
+        }
+    },
+
+    methods: {
+        tryToLog() {
+            if(this.bookMetaData !== undefined &&
+                this.userPageEntry <= this.bookMetaData.pageCount) {
+
+
+                this.pageNumberWasValid = true;
+                this.pageItems.totalPagesThisEntry = parseInt(this.userPageEntry, 10);
+
+                //initialize array
+                if(this.pageItems.entryLog == undefined) {
+                    this.pageItems.entryLog[0] = this.userPageEntry;
+                } else {
+                    this.pageItems.entryLog.push(this.userPageEntry);
+                }
+
+                this.pageItems.totalPagesAllBooks = this.pageItems.totalPagesAllBooks + parseInt(this.userPageEntry);
+
+                this.timeRecord = new Date();
+                this.timeRecord.getDate();
+                this.formattedDate = this.timeRecord.getMonth() + "/" + this.timeRecord.getDay() + "/" +
+                    this.timeRecord.getUTCFullYear();
+
+                if(this.pageItems.entryLogDates == undefined) {
+                    this.pageItems.entryLogDates[0] = this.formattedDate;
+                } else {
+                    this.pageItems.entryLogDates.push(this.formattedDate);
+                }
+
+                this.pageItems.totalPages = this.pageItems.totalPages + this.pageItems.totalPagesThisEntry;
+                this.pageItems.remainingPages = this.bookMetaData.pageCount - this.pageItems.totalPages;
+
+                if(this.remainingPages <= 0) {
+                    this.pageItems.totalPages = 0;
+                }
+
+            } else {
+                this.pageNumberWasValid = false;
+            }
+        }
+    },
+
+    mounted() {
+      this.pageItems.remainingPages = this.bookMetaData.pageCount - this.pageItems.totalPages;
+    },
+
+    template: `<div class="bookPane">
+            <h3>Your Reading Stats</h3>
+            <ul>
+                <li>Pages read in current book: {{pageItems.totalPages}}</li>
+                <li>Pages read all time: {{pageItems.totalPagesAllBooks}}</li>
+                <li v-if="pageItems.entryLog[0] == undefined">You have not read anything yet: Log your first pages!</li>
+                <li  v-if="bookMetaData.pageCount !== undefined"><input type="number" class="pageNumber innerInput" min="1" :max="pageItems.remainingPages" v-model="userPageEntry">
+                &nbsp;out of {{pageItems.remainingPages}} remaining pages</li>
+                <li v-if="!pageNumberWasValid">{{userWarning}}</li>
+                <li v-if="!pageItems.remainingPages <= 0"><v-btn  color="primary" v-on:click="tryToLog()">Log These Pages!</v-btn></li>
+                <li v-if="pageItems.remainingPages <= 0">Congrats! You finished, but your buddy looks hungry!</li>
+                <li>
+                    <ul v-if="pageItems.entryLog[0] != undefined">
+                        <li v-for="(log, index) in pageItems.entryLog">
+                        {{pageItems.entryLogDates[index]}}:&nbsp;{{log}} pages
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+    </div>`
+});
+
+Vue.component('v-tutor-window', {
+    props: {
+        tutorText: {type:String}
+    },
+    data() {
+        return {
+            tutorLog: ["Welcome to the 'Buddy Care College', here at the college we can guide you to " +
+            "caring for a health buddy. Here in Buddyland the currency is pages you've read, you can earn various buddy " +
+            "related goods for all pages logged. The course however has " +
+            "provided you with your own complimentary single use egg lamp to start you off." +
+            "Click the orange button to lock in a book to log pages from. Then as, you read you can" +
+            "log pages with the 'LOG PAGES' button." + "Now, to stop paying attention click the 'BUDDY CARE CENTER'" +
+            "button, click it again to see what we have to say as you complete various tasks, good luck!"]
+        }
+    },
+    watch:{
+      tutorText: function () {
+          if(this.tutorLog === undefined) {
+              this.tutorLog = [this.tutorText];
+          } else {
+              this.tutorLog.push(this.tutorText);
+          }
+      }
+    },
+    template:
+        `<div class="bookPane">
+            <h3>Welcome to your book buddy </h3>
+            <ul>
+                <li v-for="(text, index) in this.tutorLog">{{index + 1}}. {{text}}</li>
+            </ul> 
+        </div>`
 });

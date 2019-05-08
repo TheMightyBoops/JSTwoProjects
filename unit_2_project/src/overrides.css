@@ -27,7 +27,7 @@ body, #app{
         When image scale changes width and height
         will change
      */
-    width: 20em;
+    width: 25em;
     height: 20em;
     margin-left: 30%;
     /*left: 50%;*/
@@ -47,7 +47,7 @@ body, #app{
     width: 100%;
 }
 
-#bookPane {
+.bookPane {
     margin-left: 15%;
     margin-right: 15%;
     background-color: #0f6674;
@@ -86,4 +86,8 @@ body, #app{
 
 .disclaimer {
     font-size: .8em;
+}
+
+.pageNumber {
+    text-align: right;
 }

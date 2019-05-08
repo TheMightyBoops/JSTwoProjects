@@ -53,7 +53,9 @@
                             <v-btn class="topNav" v-if="!showNameField" color="success" v-on:click="onButtonClickName">rename your buddy!</v-btn>
                             <v-btn class="topNav" v-if="showNameField" color="warning" v-on:click="onButtonClickName">Done</v-btn>
                             <v-btn class="topNav" color="success" v-on:click="onButtonClickFeed">Feed your buddy!</v-btn>
-                            <v-btn class="topNav" color="success" v-on:click="onButtonClickBook"><i class="material-icons">book</i></v-btn>
+                            <v-btn class="topNav" color="primary" v-on:click="onButtonClickTutor">Buddy Care College</v-btn>
+                            <v-btn class="topNav" color="success" v-on:click="onButtonClickLogPages">Log pages</v-btn>
+                            <v-btn class="topNav" color="warning" v-on:click="onButtonClickBook"><i class="material-icons">book</i></v-btn>
                             <input v-if="showNameField" type="text" v-model="currentWeapon.name">
                         </div>
                         <v-inventory v-if="showInventory" id="inventory" :inventory-items="craftingMaterials" :current-weapon="currentWeapon"
@@ -63,9 +65,11 @@
                     </v-card>
                 </v-layout>
             </v-container>
-            <img id="buddy" src="./../assets/placeHolderBuddy.svg">
+            <img id="buddy":src="buddyImageRef">
             <v-stats-screen :current-character="currentCharacter" :current-weapon="currentWeapon"></v-stats-screen>
+            <v-tutor-window v-if="showTutorPane" :tutor-text="tutorText"></v-tutor-window>
             <v-book-settings-pane v-if="settingsPaneIsOpen" :book-meta-data="currentBook" :cover-image="coverImageURL"></v-book-settings-pane>
+            <v-page-log v-if="showPageLog" :page-items="pageItems" :book-meta-data="currentBook"></v-page-log>
         </v-content>
     </v-app>
 </div>
