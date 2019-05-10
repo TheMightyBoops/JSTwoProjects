@@ -52,11 +52,11 @@
                         <div id="changeButtons">
                             <v-btn class="topNav" v-if="!showNameField" color="success" v-on:click="onButtonClickName">rename your buddy!</v-btn>
                             <v-btn class="topNav" v-if="showNameField" color="warning" v-on:click="onButtonClickName">Done</v-btn>
+                            <input v-if="showNameField" type="text" v-model="currentWeapon.name" class="innerInput">
                             <v-btn class="topNav" color="success" v-on:click="onButtonClickFeed">Feed your buddy!</v-btn>
                             <v-btn class="topNav" color="primary" v-on:click="onButtonClickTutor">Buddy Care College</v-btn>
+                            <v-btn class="topNav" color="warning" v-on:click="onButtonClickBook">my book<i class="material-icons">book</i></v-btn>
                             <v-btn class="topNav" color="success" v-on:click="onButtonClickLogPages">Log pages</v-btn>
-                            <v-btn class="topNav" color="warning" v-on:click="onButtonClickBook"><i class="material-icons">book</i></v-btn>
-                            <input v-if="showNameField" type="text" v-model="currentWeapon.name">
                         </div>
                         <v-inventory v-if="showInventory" id="inventory" :inventory-items="craftingMaterials" :current-weapon="currentWeapon"
                                 :current-character="currentCharacter" style="max-height: 300px; overflow-y: scroll">
@@ -66,10 +66,16 @@
                 </v-layout>
             </v-container>
             <img id="buddy":src="buddyImageRef">
-            <v-stats-screen :current-character="currentCharacter" :current-weapon="currentWeapon"></v-stats-screen>
-            <v-tutor-window v-if="showTutorPane" :tutor-text="tutorText"></v-tutor-window>
-            <v-book-settings-pane v-if="settingsPaneIsOpen" :book-meta-data="currentBook" :cover-image="coverImageURL"></v-book-settings-pane>
-            <v-page-log v-if="showPageLog" :page-items="pageItems" :book-meta-data="currentBook"></v-page-log>
+            <div id="buddyPane">
+                <h2 class="centeredPageTitle">{{currentWeapon.name}}</h2>
+                <h3 class="centeredPageTitle" id="buddyText">{{underBuddyText}}</h3>
+            </div>
+            <!--<v-stats-screen :current-character="currentCharacter" :current-weapon="currentWeapon"></v-stats-screen>-->
+            <v-tutor-window v-if="showTutorPane" :tutor-text="tutorText" ></v-tutor-window>
+            <v-book-settings-pane v-if="settingsPaneIsOpen" :book-meta-data="currentBook" :cover-image="coverImageURL" style="max-height: 300px; overflow-y: scroll" ></v-book-settings-pane>
+            <v-page-log v-if="showPageLog" :page-items="pageItems" :book-meta-data="currentBook"
+                        :crafting-materials="craftingMaterials" :tutor-text="tutorText" :under-buddy-text="underBuddyText"
+                        style="max-height: 300px; overflow-y: scroll"></v-page-log>
         </v-content>
     </v-app>
 </div>

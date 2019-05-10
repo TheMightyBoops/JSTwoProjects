@@ -35,6 +35,8 @@ Vue.component('v-inventory', {
 
             eraseBorder('characterName');
             eraseBorder('weaponName');
+            this.$root.$data.underBuddyText = "He's still hungry!";
+            document.getElementById("buddyText").style.color = "black";
             let newQuantity = null;
             for (let i = 0; i < this.inventoryItems.length; ++i) {
                 if (this.inventoryItems[i].name === materialName) {
@@ -95,9 +97,7 @@ Vue.component('v-inventory', {
                             filter_vintage
                         </i></span>
                         <span v-if="!item.isOrganicMaterial">
-                        <i class="material-icons">
-                            build
-                        </i>
+                        <img :src="item.thumbnailRef" class="itemIcons">
                         </span>
                         <strong>{{item.name}}</strong>&nbsp;&nbsp;&nbsp; {{item.experience}}<strong>exp.</strong>&nbsp;&nbsp;&nbsp;{{item.quantity}}<strong>qty.</strong>
                         <span v-if="qSlider[i] === 0 || qSlider.length === 0">
@@ -458,7 +458,10 @@ Vue.component('v-book-settings-pane', {
 Vue.component('v-page-log', {
     props: {
         pageItems: {type:Object},
-        bookMetaData: {type: Object}
+        bookMetaData: {type: Object},
+        craftingMaterials: {type: Array, required:true},
+        tutorText: {type: String},
+        underBuddyText: {type: String}
     },
 
     data() {
@@ -467,7 +470,8 @@ Vue.component('v-page-log', {
             timeRecord: undefined,
             formattedDate: undefined,
             userWarning: "You entered your pages wrong, try again",
-            pageNumberWasValid: true
+            pageNumberWasValid: true,
+            oldPageItems: undefined,
         }
     },
 
@@ -476,6 +480,7 @@ Vue.component('v-page-log', {
             if(this.bookMetaData !== undefined &&
                 this.userPageEntry <= this.bookMetaData.pageCount) {
 
+                this.oldPageItems = this.pageItems;
 
                 this.pageNumberWasValid = true;
                 this.pageItems.totalPagesThisEntry = parseInt(this.userPageEntry, 10);
@@ -503,6 +508,13 @@ Vue.component('v-page-log', {
                 this.pageItems.totalPages = this.pageItems.totalPages + this.pageItems.totalPagesThisEntry;
                 this.pageItems.remainingPages = this.bookMetaData.pageCount - this.pageItems.totalPages;
 
+                let didListUpdate = calculateRewards(this.pageItems, this.oldPageItems, this.craftingMaterials);
+                if(didListUpdate) {
+                    this.$root.$data.underBuddyText = "You have gained a new treat for your buddy!";
+                    document.getElementById("buddyText").style.color = "green";
+                }
+
+
                 if(this.remainingPages <= 0) {
                     this.pageItems.totalPages = 0;
                 }
@@ -510,12 +522,61 @@ Vue.component('v-page-log', {
             } else {
                 this.pageNumberWasValid = false;
             }
+
+
+
+            function calculateRewards($pageItems, $oldPageItems, $craftingMaterials) {
+                let tempCraftingMaterial = undefined;
+                let $didListUpdate=false;
+                //decide what awarads someone gets
+                if (($pageItems.totalPages) >= 100) {
+                    tempCraftingMaterial = new CraftingMaterial("Banana", false, 20, 1, "./../assets/icons/banana.png");
+                    addAMaterial(tempCraftingMaterial, $craftingMaterials);
+                    //this.$root.$data.underBuddyText = "You read more at least 100 Pages this session, here's" +
+                    //    "something your buddy will love!"
+                    $didListUpdate = true;
+                }
+
+                if ($pageItems.remainingPages <= 0) {
+                    tempCraftingMaterial = new CraftingMaterial("Chocolate Bar", false, 500, 1, "./../assets/icons/chocolate.png");
+                    addAMaterial(tempCraftingMaterial, $craftingMaterials);
+                    //this.$root.$data.underBuddyText = "Wow, you finished your book, here's your buddie's favorite treat!"
+                    $didListUpdate = true;
+                }
+
+                return $didListUpdate;
+            }
+
+
+            function addAMaterial(craftingMaterial, craftingMaterials) {
+                if(craftingMaterials !== undefined) {
+                    let isInList = false;
+                    let i = 0;
+                    while (i < craftingMaterials.length) {
+
+                        if (craftingMaterials[i].name === craftingMaterial.name) {
+                            isInList = true;
+                            break;
+                        }
+
+                        ++i;
+                    }
+
+                    if (isInList) {
+                        craftingMaterials[i].quantity = craftingMaterials[i].quantity
+                            + craftingMaterial.quantity
+                    } else {
+                        craftingMaterials.push(craftingMaterial)
+                    }
+                }
+            }
         }
     },
 
     mounted() {
       this.pageItems.remainingPages = this.bookMetaData.pageCount - this.pageItems.totalPages;
     },
+
 
     template: `<div class="bookPane">
             <h3>Your Reading Stats</h3>
@@ -528,6 +589,9 @@ Vue.component('v-page-log', {
                 <li v-if="!pageNumberWasValid">{{userWarning}}</li>
                 <li v-if="!pageItems.remainingPages <= 0"><v-btn  color="primary" v-on:click="tryToLog()">Log These Pages!</v-btn></li>
                 <li v-if="pageItems.remainingPages <= 0">Congrats! You finished, but your buddy looks hungry!</li>
+                <li class="disclaimer">* if you finished a book and the information here is still from your last book, 
+                just open and close this panel with 'LOG PAGES'</li>
+                <h3>Your Reading Log</h3>
                 <li>
                     <ul v-if="pageItems.entryLog[0] != undefined">
                         <li v-for="(log, index) in pageItems.entryLog">
@@ -549,8 +613,8 @@ Vue.component('v-tutor-window', {
             "caring for a health buddy. Here in Buddyland the currency is pages you've read, you can earn various buddy " +
             "related goods for all pages logged. The course however has " +
             "provided you with your own complimentary single use egg lamp to start you off." +
-            "Click the orange button to lock in a book to log pages from. Then as, you read you can" +
-            "log pages with the 'LOG PAGES' button." + "Now, to stop paying attention click the 'BUDDY CARE CENTER'" +
+            " Click the orange button to lock in a book to log pages from. Then as, you read you can" +
+            " log pages with the 'LOG PAGES' button." + " Now, toggle these messages click 'BUDDY CARE CENTER' " +
             "button, click it again to see what we have to say as you complete various tasks, good luck!"]
         }
     },

@@ -11,6 +11,10 @@ h1 {
     margin: .1em;
 }
 
+h3 {
+    margin-left: 1%;
+}
+
 p {
     margin: 1em;
 }
@@ -19,7 +23,14 @@ table, th, td {
 }
 
 body, #app{
-    background-color: #0a1a25;
+    background-color: #5D707F;
+}
+
+#buddyPane {
+    text-align: center;
+    background-color: #6D8A96;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 
 #buddy {
@@ -29,8 +40,13 @@ body, #app{
      */
     width: 25em;
     height: 20em;
-    margin-left: 30%;
+    margin-left: 34%;
     /*left: 50%;*/
+}
+
+.itemIcons {
+    width: 100px;
+    height: 100px;
 }
 
 #bookCover {
@@ -50,14 +66,16 @@ body, #app{
 .bookPane {
     margin-left: 15%;
     margin-right: 15%;
-    background-color: #0f6674;
+    background-color: #6D8A96;
     border-radius: 3px;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 .innerInput {
     margin-left: 2%;
     margin-top: 2%;
-    background-color: #34ce57;
+    background-color: #8797B2;
     border: 1px solid black;
     border-radius: 3px;
 }

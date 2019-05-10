@@ -15,6 +15,7 @@ window.onload = function () {
             settingsPaneIsOpen: false,
             showPageLog: false,
             showTutorPane: true,
+            underBuddyText: "Remember your buddy's always hungry!",
             coverImageURL: "./../assets/Book-Placeholder.png",
             buddyImageRef: "./../assets/egg.png",
             pageItems: {
@@ -91,7 +92,7 @@ window.onload = function () {
                 this.currentBook.title = "Buddy";
                 this.currentBook.pageCount = 100;
                 this.currentWeapon = new Weapon("Egg", 0, 0, 1000, 0, 0);
-                this.craftingMaterials = [new CraftingMaterial("Hatch Light", false, 1000, 1)];
+                this.craftingMaterials = [new CraftingMaterial("Hatch Light", false, 1000, 1, "./../assets/icons/light.png")];
             }
 
         },
@@ -238,8 +239,15 @@ window.onload = function () {
                             break;
 
                         case 3:
-                            this.buddyImageRef = "./../assets/buddy2.png"
+                            this.buddyImageRef = "./../assets/buddy2.png";
+                            this.tutorText = "He's really growing! Here's a little secret " +
+                                "between buddies, if you finish a whole book you will get something " +
+                                "your buddy will love.";
                             break;
+
+                        case 4:
+                            this.buddyImageRef = "./../assets/buddy3.png";
+                            this.tutorText = "What a buddy! You're good at this! Keep Reading!"
                     }
                 }
             }
